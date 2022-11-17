@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calc</title>
+<style>
+.main {
+	width: 400px;
+	margin-left: 20%;
+	margin-top: 10%;
+	padding-left: 50px;
+	padding-bottom: 30px;
+	padding-top: 30px;
+	padding-right: 50px;
+	background-color: blue;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: 100px 100px 100px 100px;
+	grid-template-rows: 100px 100px 100px 100px;
+	height: auto;
+}
+
+button {
+	font-size: 30px;
+}
+
+.showarea {
+	width: 395px;
+	height: 250px;
+	color: white;
+	overflow: hidden;
+	border: 2px solid white;
+	background: black;
+}
+
+#currentOperation {
+	text-align: right;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.current {
+	padding-right: 10px;
+}
+
+#oldOperation {
+	text-align: right;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+#total {
+	text-align: right;
+	font-size: 30px;
+	font-weight: bold;
+	color: white;
+}
+</style>
+</head>
+<body>
+	<div class="main">
+		<div class="showarea">
+			<div class="current">
+				<p id="oldOperation"></p>
+			</div>
+			<div class="current">
+				<p id="currentOperation"></p>
+			</div>
+			<div class="current">
+				<p id="total"></p>
+			</div>
+		</div>
+		<div class="grid-container">
+
+			<button class="btn" value="7" onclick="arithmeticOperation('7')">7</button>
+			<button class="btn" value="8" onclick="arithmeticOperation('8')">8</button>
+			<button class="btn" value="9" onclick="arithmeticOperation('9')">9</button>
+			<button class="btn" value="*" id="multiply"
+				onclick="getOperators('*')">*</button>
+			<button class="btn" value="4" onclick="arithmeticOperation('4')">4</button>
+			<button class="btn" value="5" onclick="arithmeticOperation('5')">5</button>
+			<button class="btn" value="6" onclick="arithmeticOperation('6')">6</button>
+			<button class="btn" value="-" id="minus"
+				onclick="getOperators('-')">-</button>
+			<button class="btn" value="1" onclick="arithmeticOperation('1')">1</button>
+			<button class="btn" value="2" onclick="arithmeticOperation('2')">2</button>
+			<button class="btn" value="3" onclick="arithmeticOperation('3')">3</button>
+			<button class="btn" id="plus" value="+"
+				onclick="getOperators('+')">+</button>
+			<button class="btn" value="." onclick="arithmeticOperation('.')">.</button>
+			<button class="btn" value="0" onclick="arithmeticOperation('0')">0</button>
+			<button class="btn" id="division" value="/"
+				onclick="getOperators('/')">/</button>
+			<button class="btn" value="=" onclick="makeArithmetic('=')">=</button>
+		</div>
+		<div>
+			<button id="clear" value="=" onclick="clearAlls('=')">Clear</button>
+		</div>
+
+	</div>
+
+
+	<script>
+		var count = 0;
+		var numberArray = "";
+		var numberArray1 = "";
+		var currentArray = "";
+		var currentArray1 = "";
+		var operandsArray;
+		var dummy;
+		var total;
+		var totalFlag = false;
+		var firstValue = 0;
+
+		function allocateColor(operand) {
+			switch (operand) {
+			case '+':
+				document.getElementById('plus').style.background = "red";
+				document.getElementById('minus').style.background = "white";
+				document.getElementById('multiply').style.background = "white";
+				document.getElementById('division').style.background = "white";
+				break;
+			case '-':
+				document.getElementById('minus').style.background = "red";
+				document.getElementById('plus').style.background = "white";
+				document.getElementById('multiply').style.background = "white";
+				document.getElementById('division').style.background = "white";
+				break;
+			case '*':
+				document.getElementById('multiply').style.background = "red";
+				document.getElementById('plus').style.background = "white";
+				document.getElementById('minus').style.background = "white";
+				document.getElementById('division').style.background = "white";
+				break;
+			case '/':
+				document.getElementById('plus').style.background = "white";
+				document.getElementById('minus').style.background = "white";
+				document.getElementById('multiply').style.background = "white";
+				document.getElementById('division').style.background = "red";
+				break;
+			case '=':
+				document.getElementById('plus').style.background = "white";
+				document.getElementById('minus').style.background = "white";
+				document.getElementById('multiply').style.background = "white";
+				document.getElementById('division').style.background = "white";
+				break;
+			}
+		}
+		function checkDot(operands) {
+			var counts = numberArray.includes(".");
+			if (counts == false) {
+				numberArray += operands;
+			}
+		}
+		
+		function clearAlls(operator){
+			count = 0;
+			 numberArray = "";
+			 numberArray1 = "";
+			 currentArray = "";
+			 currentArray1 = "";
+			 operandsArray;
+			 dummy=undefined;
+			 total=undefined;
+			 totalFlag = false;
+			 firstValue = 0;
+			 document.getElementById('total').innerHTML = "";
+			 document.getElementById('oldOperation').innerHTML = "";
+				document.getElementById('currentOperation').innerHTML = "";
+				allocateColor(operator);
+			
+		}
+		function makeArithmetic(operands) {
+
+			currentArray1 = Number(currentArray);
+			numberArray1 = Number(numberArray);
+			allocateColor(operands);
+			totalFlag = true;
+			dummy = undefined;
+			firstValue = false;
+			var message = "";
+			switch (operandsArray) {
+			case '+':
+				total = currentArray1 + numberArray1;
+				document.getElementById('plus').style.background = "white";
+				break;
+			case '-':
+				total = currentArray1 - numberArray1;
+				break;
+			case '/':
+				total = currentArray1 / numberArray1;
+				if (total == Infinity) {
+					total = 0;
+					message = "you cant divide by zero";
+				}
+				break;
+			case '*':
+				total = currentArray1 * numberArray1;
+				break;
+
+			}
+			if (message == "") {
+				document.getElementById('total').innerHTML = total;
+			} else {
+				document.getElementById('total').innerHTML = message;
+			}
+
+		}
+		function getOperators(operator){
+			if (count == 0) { 
+				if(operator=="-"){
+					arithmeticOperation(operator);
+				}
+			}
+			else{
+				if (total == undefined) {
+					if (dummy == undefined) {
+						document.getElementById('oldOperation').innerHTML = numberArray;
+						document.getElementById('currentOperation').innerHTML = operator;
+
+						allocateColor(operator);
+						currentArray = numberArray;
+						dummy = operator;
+						numberArray = "";
+						operandsArray = operator;
+						totalFlag = false;
+					} else if (firstValue ==false) {
+						if (operator == '-') {
+							firstValue = true;
+							numberArray += operator;
+							document.getElementById('currentOperation').innerHTML = operator;
+						} else {
+							document.getElementById('currentOperation').innerHTML = operator;
+							operandsArray = operator;
+							allocateColor(operator);
+							totalFlag = false;
+						}
+
+					}
+
+				} else {
+					
+						if (operator == '-') {
+							if (firstValue ==false) {
+							firstValue=true;
+							numberArray += operator;
+							document.getElementById('currentOperation').innerHTML = operator;
+						} 
+
+					}
+					else{
+						document.getElementById('oldOperation').innerHTML = total;
+						document.getElementById('currentOperation').innerHTML = operator;
+						allocateColor(operator);
+						currentArray = total;
+						numberArray = "";
+						operandsArray = operator;
+						document.getElementById('total').innerHTML = "";
+						totalFlag = false;
+					}
+					
+
+				}
+			}
+			
+		
+
+		}
+
+		function arithmeticOperation(operands) {
+
+			if (count == 0) { 
+					if (operands != "-") {
+						if (operands == ".") {
+							checkDot(operands);
+						} else {
+							numberArray += operands;
+							count++;
+							
+						}
+
+					} else {
+						if (numberArray == "") {
+							numberArray += operands;
+						}
+
+					}
+					document.getElementById('currentOperation').innerHTML = numberArray;
+
+
+			} else {
+					if (totalFlag == false) {
+						if (operands == ".") {
+							checkDot(operands);
+						} else {
+							numberArray += operands;
+							
+						}
+						document.getElementById('currentOperation').innerHTML = numberArray;
+
+					} else {
+						if (operands == ".") {
+							checkDot(operands);
+						} else {
+							numberArray = "";
+							currentArray = "";
+							total = undefined;
+							totalFlag = false;
+							numberArray += operands;
+							document.getElementById('currentOperation').innerHTML = numberArray;
+							document.getElementById('total').innerHTML = "";
+							document.getElementById('oldOperation').innerHTML = "";
+						}
+
+					}
+
+				}
+			}
+	</script>
+</body>
+</html>
