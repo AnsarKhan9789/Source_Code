@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+body {
+	background: black;
+}
+label{
+color:red;
+}
+button{
+padding-left:100px;
+padding-right:100px;
+font-size:20px;
+}
+</style>
+  <link rel = "icon" href = "../images/ansarbanklogo.png"
+        type = "image/x-icon">
+<title>Login</title>
+</head>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<body>
+
+
+	<div class="loginpage" id="loginpage">
+		<h1>Login</h1>
+		
+
+			<div class="textbox">
+				<input type="tel" name="CustomerId" placeholder="CustomerId" pattern="(2022)[0-9]{3}" id="user" required autocomplete="off">
+			</div>
+
+			<div class="textbox">
+				<input type="password"  id="pass" name="password" placeholder="Password" required autocomplete="off">
+			</div>
+			<label id="message"></label><br>
+			<button name="login" value="login" onclick="testServer()">Login</button>
+
+
+
+
+
+
+
+	</div>
+	<div class="maincontents" id="accountDetails">
+
+
+	<table class="tables">
+		<thead>
+			<tr>
+				<th>Customer Id</th>
+				<th>Name</th>
+				<th>Mobile</th>
+				<th>Email</th>
+				<th>Role</th>
+
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+		
+		</tbody>
+
+	</table>
+	</div>
+
+
+
+
+
+<script>
+
+$(document).ready(function(){
+	
+    $('#accountDetails').hide();
+});
+	function testServer(){
+		console.log("hi");
+		var pass=$("#pass").val();
+		var name=$("#user").val();
+		var object={ button:"login",CustomerId:name,password:pass};
+		$.ajax({
+		    type: "POST",
+		    url:"../TestServlet",
+		    data:object,
+		    success: function( data ) {
+		    	$("#accountDetails").show();
+		    	$("#loginpage").hide();
+				var datas=JSON.parse(data);
+				var message=datas['message'];
+				$("#message").html(message);
+				if(datas!=undefined){
+					var name=datas['name'];
+					var userId=datas['userId'];
+					var email=datas['emailId'];
+					var mobile=datas['mobileNumber'];
+					var role=datas['role'];
+					$("#tableBody").html("<tr><td>"+userId+"</td><td>"+name+"</td><td>"+mobile+"</td><td>"+email+"</td><td>"+role+"</td></tr>");
+				}
+				
+		 
+
+		    },
+		    error : function(data){
+		    	$("#message").html("SomeThing Went Wrong");
+		    	
+		    }
+		}); 
+		
+	}
+		
+	
+	function sendToTheRequiredPage(role){
+		
+	}
+
+
+</script>
+</body>
+</html>
